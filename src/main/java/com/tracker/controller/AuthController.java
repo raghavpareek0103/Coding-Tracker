@@ -1,29 +1,25 @@
 package com.tracker.controller;
-import org.springframework.web.bind.annotation.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.tracker.repository.UserRepository;
-import com.tracker.entity.User;
+import org.springframework.web.bind.annotation.*;
 import com.tracker.dto.LoginDto;
+import com.tracker.dto.RegisterDto;
+import com.tracker.service.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
- @Autowired UserRepository userRepo;
- @Autowired BCryptPasswordEncoder encoder;
+    @Autowired UserService userService; // interface, not impl
 
- @PostMapping("/register")
- public String register(@RequestBody User user) {
-  user.setPassword(encoder.encode(user.getPassword()));
-  userRepo.save(user);
-  return "REGISTERED";
- }
+    @PostMapping("/register")
+    public String register(@Valid @RequestBody RegisterDto dto) {
+        return userService.register(dto);
+    }
 
- @PostMapping("/login")
- public String login(@RequestBody LoginDto dto) {
-  User user = userRepo.findByEmail(dto.getEmail()).orElseThrow();
-  return encoder.matches(dto.getPassword(), user.getPassword())
-    ? "LOGIN_SUCCESS" : "INVALID";
- }
+    @PostMapping("/login")
+    public String login(@Valid @RequestBody LoginDto dto) {
+        return userService.login(dto);
+    }
 }
