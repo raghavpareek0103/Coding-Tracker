@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.tracker.entity.Question;
 import com.tracker.service.QuestionService;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Map;
@@ -53,5 +54,12 @@ public class QuestionController {
     public List<Question> filter(@PathVariable Long userId,
                                  @RequestParam String difficulty) {
         return questionService.filterByDifficulty(userId, difficulty);
+    }
+    @GetMapping("/paged/{userId}")
+    public Page<Question> getPaged(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return questionService.getAllByUserPaginated(userId, page, size);
     }
 }

@@ -3,6 +3,10 @@ package com.tracker.service;
 import com.tracker.entity.Question;
 import java.util.List;
 import java.util.Map;
+import com.tracker.entity.Question;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 public interface QuestionService {
     Question addQuestion(Question question);
@@ -14,4 +18,5 @@ public interface QuestionService {
     void deleteQuestion(Long id);
     Question getById(Long id);
     List<Question> filterByDifficulty(Long userId, String difficulty);
+    Page<Question> getAllByUserPaginated(Long userId, int page, int size); //
 }

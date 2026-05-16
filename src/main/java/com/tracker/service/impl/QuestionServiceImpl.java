@@ -6,7 +6,10 @@ import com.tracker.repository.QuestionRepository;
 import com.tracker.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,7 +42,6 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepo.findByUserId(userId);
     }
 
-    // ✅ Update question
     @Override
     public Question updateQuestion(Long id, Question updatedQuestion) {
         Question existing = questionRepo.findById(id)
@@ -53,7 +55,6 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepo.save(existing);
     }
 
-    // ✅ Delete question
     @Override
     public void deleteQuestion(Long id) {
         if (!questionRepo.existsById(id)) {
@@ -62,14 +63,12 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepo.deleteById(id);
     }
 
-    // ✅ Get by ID
     @Override
     public Question getById(Long id) {
         return questionRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
     }
 
-    // ✅ Filter by difficulty
     @Override
     public List<Question> filterByDifficulty(Long userId, String difficulty) {
         try {
@@ -78,5 +77,11 @@ public class QuestionServiceImpl implements QuestionService {
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid difficulty! Use EASY, MEDIUM or HARD");
         }
+    }
+
+    @Override
+    public Page<Question> getAllByUserPaginated(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("solvedDate").descending());
+        return questionRepo.findByUserId(userId, pageable);
     }
 }
