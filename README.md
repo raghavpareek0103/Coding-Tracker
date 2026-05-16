@@ -26,6 +26,7 @@ A RESTful backend application built with **Spring Boot** that allows users to tr
 - ✅ Global exception handling
 - ✅ Input validation
 - ✅ CORS configuration
+- ✅ Pagination support
 
 ## 📋 API Endpoints
 
@@ -144,7 +145,10 @@ src/main/java/com/tracker/
 │       └── UserServiceImpl.java
 └── CodingTrackerApplication.java
 ```
-
+### 📄 Pagination
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/questions/paged/{userId}?page=0&size=10` | Get paginated questions |
 ## 👨‍💻 Author
 
 **Raghav Pareek**
